@@ -1,5 +1,9 @@
-import { PokemonsReponse, SimplePokemon } from "@/app/pokemons";
-import Image from "next/image";
+import {PokemonGrid, PokemonsReponse, SimplePokemon } from "@/pokemons";
+
+export const metadata = {
+  title: 'Pokemons',
+  descripcion: 'Página con lista de pokémones',
+}
 
 const getPokemons = async (limit = 20, offset = 0):Promise<SimplePokemon[]> => {
   const data: PokemonsReponse = await fetch(`https://pokeapi.co/api/v2/pokemon?limit=${limit}&offset=${offset}`)
@@ -10,30 +14,19 @@ const getPokemons = async (limit = 20, offset = 0):Promise<SimplePokemon[]> => {
       name: pokemon.name,
     }))
 
+    // throw new Error('Esto es un error que estoy llamando')
+
     return pokemons;
 }
 
 export default async function PokemonsPage() {
 
-  const pokemons = await getPokemons();
-  console.log(pokemons);
-  
+  const pokemons = await getPokemons(151);
 
   return (
     <div className="flex flex-col">
-      <div className="flex flex-wrap gap-10 items-center justify-center">
-
-        {pokemons.map(({id, name}) => (
-          <Image 
-            key={id}
-            src={`https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/${id}.svg`}
-            alt={name}
-            width={100}
-            height={100}
-          />
-        ))}
-
-      </div>
+      <span className="text-5xl my-2">Listado de Pokémons! <small>Estático</small></span>
+        <PokemonGrid pokemons={pokemons}/>
     </div>
   )
 }
